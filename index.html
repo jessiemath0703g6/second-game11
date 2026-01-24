@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- ✅ 快取連結預覽（請放在 <head> 裡） -->
+    <!-- 控制預覽卡片那行文字（很多平台會抓這個） -->
+    <meta name="description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+
+    <!-- ✅ LINE / FB 預覽用 -->
+    <meta property="og:title" content="Jessie Math - 消失的圓之鑰">
+    <meta property="og:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta property="og:type" content="website">
+
+    <!-- ✅ 預覽圖片（把檔名換成你的主題圖，例如 g6-u11.png） -->
+    <meta property="og:image" content="g6-u11.png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1536">
+    <meta property="og:image:alt" content="Jessie Math 遊戲封面">
+
+    <!-- ✅ 有些平台會參考 -->
+    <link rel="image_src" href="g6-u11.png">
+
+    <!-- ✅ Twitter / X（可用同一張圖） -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jessie Math - 消失的圓之鑰">
+    <meta name="twitter:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta name="twitter:image" content="g6-u11.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessie Math - 消失的圓之鑰</title> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --p-yellow: #FFD700; --bg-blue: #f8f9fa; --dark: #01579b; --orange: #ff9800; --nav-border: #e0e6ed; --nav-text: #4a5568; }
+        body { font-family: "Microsoft JhengHei", Arial, sans-serif; background: var(--bg-blue); margin: 0; overflow-x: hidden; }
+
+        /* --- Hero Navigation --- */
+        header { 
+            background: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid var(--nav-border); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-box { display: flex; align-items: center; }
+        .logo-circle { 
+            width: 42px; height: 42px; border: 2px solid var(--p-yellow); border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; margin-right: 12px; overflow: hidden;
+        }
+        .logo-circle img { width: 85%; height: auto; }
+        .brand { font-size: 24px; font-weight: 700; color: #2d3748; letter-spacing: -0.5px; }
+
+        .hero-nav { display: flex; align-items: center; gap: 12px; }
+        .nav-link {
+            text-decoration: none; color: var(--nav-text); font-size: 16px; padding: 8px 20px;
+            border: 1px solid var(--nav-border); border-radius: 25px; display: flex; align-items: center;
+            gap: 8px; transition: all 0.2s ease; background: white;
+        }
+        .nav-link:hover { background: #f7fafc; border-color: #cbd5e0; }
+        .nav-link.special { color: #667eea; border-color: #667eea; }
+        .nav-link.special:hover { background: #ebf4ff; }
+        .nav-link i { font-size: 14px; }
+
+        /* --- Main Content --- */
+        #main-container { 
+            max-width: 650px; 
+            margin: 30px auto; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            position: relative; 
+            text-align: center; 
+            border: 1px solid #edf2f7; 
+        }
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        input { padding: 14px; font-size: 18px; border: 2px solid #e2e8f0; border-radius: 12px; width: 85%; margin: 15px 0; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: #667eea; }
+        .btn { background: var(--dark); color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 30px; cursor: pointer; margin: 5px; font-weight: bold; }
+        .btn-orange { background: var(--orange); }
+
+        #shape-display { height: 180px; display: flex; justify-content: center; align-items: center; margin: 20px 0; background: #fafcfe; border-radius: 15px; overflow: hidden; }
+
+        /* 幾何圖形專用樣式 */
+        .circle-base { border: 2px solid #2d3748; border-radius: 50%; background: rgba(102,126,234,0.1); position: relative; display: flex; justify-content: center; align-items: center; }
+        .radius-line { position: absolute; top: 50%; left: 50%; height: 2px; background: #e53e3e; transform-origin: left; }
+        .radius-label { position: absolute; color: #e53e3e; font-size: 14px; font-weight: bold; }
+
+        .stats { display: flex; justify-content: space-around; background: #2d3748; color: white; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; }
+        #q-box { font-size: 1.15rem; font-weight: bold; margin: 20px 0; min-height: 3.5em; color: #2d3748; line-height: 1.6; }
+
+        .diff-group { margin-bottom: 25px; }
+        .diff-btn { padding: 10px 22px; border: 1px solid #cbd5e0; border-radius: 12px; cursor: pointer; display: inline-block; margin: 5px; transition: 0.3s; color: #4a5568; background: white; }
+        .diff-btn.selected { background: var(--dark); color: white; border-color: var(--dark); }
+
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; }
+        .rank-list { text-align: left; margin-top: 25px; background: #f7fafc; padding: 20px; border-radius: 15px; border: 1px solid #edf2f7; }
+        .rank-item { border-bottom: 1px solid #e2e8f0; padding: 10px 0; display: flex; justify-content: space-between; font-weight: 500; }
+
+        /* ✅ Footer：膠囊條 */
+        footer { 
+            margin-top: 26px;
+            padding: 0 14px 22px;
+        }
+        .footer-pill{
+            max-width: 900px;
+            margin: 0 auto;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid #edf2f7;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .footer-left,.footer-right{ display:flex; align-items:center; gap:10px; }
+        .footer-dot{
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--p-yellow);
+            box-shadow: 0 0 0 4px rgba(255,215,0,0.18);
+        }
+        .footer-copy{ color:#2d3748; font-weight:700; font-size: 13px; }
+        .footer-icon{ color: var(--dark); font-size: 14px; }
+        .footer-tagline{ color:#4a5568; font-weight:600; font-size: 13px; }
+
+        /* ✅ RWD：手機 / 平板 / 電腦 */
+        @media (max-width: 1024px) {
+            #main-container { max-width: 720px; margin: 22px auto; }
+        }
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px; }
+            .hero-nav { flex-wrap: wrap; justify-content: center; }
+            .nav-link { padding: 6px 15px; font-size: 14px; }
+
+            #main-container {
+                margin: 16px 12px;
+                padding: 18px;
+                border-radius: 18px;
+            }
+            input { width: 92%; font-size: 16px; padding: 12px; }
+            .stats { gap: 10px; flex-wrap: wrap; }
+            #shape-display { height: 170px; }
+            .btn { padding: 11px 22px; font-size: 15px; }
+
+            .footer-pill{
+                border-radius: 22px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .footer-copy,.footer-tagline{ font-size: 12.5px; }
+        }
+        @media (max-width: 420px) {
+            .brand { font-size: 20px; }
+            .logo-circle { width: 38px; height: 38px; }
+            #shape-display { height: 160px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-box">
+        <div class="logo-circle"><img src="JESSIEMATH-Q.png" onerror="this.src='https://via.placeholder.com/35?text=J'"></div>
+        <div class="brand">Jessie Math</div>
+    </div>
+    <nav class="hero-nav">
+        <a href="https://jessiemath0703-chu.github.io/website2/" class="nav-link"><i class="fas fa-home"></i> 首頁</a>
+        <a href="https://jessiemath0703-chu.github.io/Game-Lobby/" class="nav-link"><i class="fas fa-laptop"></i> 遊戲大廳</a>
+        <a href="https://jessiemath0703-chu.github.io/Game-Lobby/#g6-u11" class="nav-link special"><i class="fas fa-chevron-left"></i> 六年級圓面積與扇形面積</a>
+    </nav>
+</header>
+
+<div id="main-container">
+    <div id="scr-login" class="screen active">
+        <h2 style="color: #2d3748; margin-bottom: 25px;">幾何王國：消失的圓之鑰</h2>
+        <div style="background: #ebf4ff; border: 1px solid #bee3f8; padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 25px; font-size: 15px; color: #2c5282;">
+            <strong style="font-size: 17px; display: block; margin-bottom: 8px;"><i class="fas fa-scroll"></i> 冒險試煉指南</strong>
+            • 使用 <b>3.14</b> 計算圓與扇形面積。<br>
+            • 答對加分獎勵秒數，答錯扣除秒數。<br>
+            • 挑戰結束後可查看王國英雄榜。
+        </div>
+        <p style="font-weight: 600; color: #4a5568;">請輸入勇者姓名：</p>
+        <input type="text" id="player-name" placeholder="您的冒險代號...">
+        <br>
+        <button class="btn" onclick="toLevels()" style="padding: 14px 45px; font-size: 18px;">前往選關</button>
+        <!-- ✅ 排行榜不在輸入名字頁顯示 -->
+    </div>
+
+    <div id="scr-levels" class="screen">
+        <h3 style="color: #2d3748;">選擇試煉主題與挑戰難度</h3>
+        <div class="diff-group">
+            <div class="diff-btn selected" id="diff-1" onclick="setDiff(1, 1000)">簡易 (1x)</div>
+            <div class="diff-btn" id="diff-2" onclick="setDiff(2, 800)">標準 (1.2x)</div>
+            <div class="diff-btn" id="diff-3" onclick="setDiff(3, 650)">挑戰 (1.5x)</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <button class="btn btn-orange" onclick="startGame(1)">🌲 圓之森林</button>
+            <button class="btn btn-orange" onclick="startGame(2)">🌊 扇形之海</button>
+            <button class="btn btn-orange" onclick="startGame(3)">⚙️ 幾何工坊</button>
+            <button class="btn btn-orange" onclick="startGame(4)">🐄 牛吃草應用</button>
+        </div>
+
+        <!-- ✅ 排行榜在此頁顯示 -->
+        <div id="levels-rank" class="rank-list">
+            <h4 style="margin-top:0;"><i class="fas fa-trophy" style="color:gold;"></i> 英雄排行榜</h4>
+            <div id="rank-content-levels"></div>
+        </div>
+
+        <button class="btn" onclick="showScr('scr-login')" style="background:#edf2f7; color: #4a5568;">返回主頁</button>
+    </div>
+
+    <div id="scr-game" class="screen">
+        <div class="stats">
+            <span><i class="fas fa-hourglass-half"></i> 剩餘時間: <span id="timer">60</span>s</span>
+            <span><i class="fas fa-star" style="color:gold;"></i> 分數: <span id="score">0</span></span>
+        </div>
+        <div id="shape-display"></div>
+        <div id="q-box">正在開啟幾何門扉...</div>
+        <input type="number" id="user-ans" placeholder="請輸入數值結果" step="0.01">
+        <br>
+        <button class="btn" onclick="checkAns()" style="padding: 12px 50px;">確認送出</button>
+        <div style="margin-top:30px; border-top:1px solid #edf2f7; padding-top:20px; display: flex; justify-content: center; gap: 10px;">
+            <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="pauseGame()"><i class="fas fa-pause"></i> 暫停</button>
+            <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="restartGame()"><i class="fas fa-undo"></i> 重來</button>
+            <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="backToLevels()"><i class="fas fa-th-large"></i> 選關卡</button>
+        </div>
+        <div id="pause-overlay" class="overlay">
+            <h1 style="color: #2d3748;">試煉暫停中</h1>
+            <button class="btn" onclick="resumeGame()" style="padding: 14px 40px;">返回試煉</button>
+        </div>
+    </div>
+
+    <div id="scr-result" class="screen">
+        <h2>試煉結束！</h2>
+        <div style="font-size: 1.1rem; color: #718096;">最終冒險分數</div>
+        <h1 id="final-score" style="color:var(--dark); font-size: 4rem; margin: 15px 0;">0</h1>
+        <p style="font-size: 1.25rem; color: #4a5568;">勇者：<span id="res-name" style="font-weight:bold;"></span></p>
+        <button class="btn" onclick="showScr('scr-levels')">再次挑戰</button>
+    </div>
+</div>
+
+<!-- ✅ 第一：頁尾加入膠囊 Footer（照你給的結構） -->
+<footer>
+    <div class="footer-pill">
+        <div class="footer-left">
+            <div class="footer-dot" aria-hidden="true"></div>
+            <div class="footer-copy">© 2025–2026 Jessie Math 捷析老師. All rights reserved.</div>
+        </div>
+        <div class="footer-right">
+            <div class="footer-icon" aria-hidden="true"><i class="fas fa-compass"></i></div>
+            <div class="footer-tagline">數學不迷路，Jessie 帶你走向理解。</div>
+        </div>
+    </div>
+</footer>
+
+<div id="fb-box" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); padding:25px 50px; border-radius:20px; color:white; display:none; z-index:2000; font-size:28px; font-weight:bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"></div>
+
+<script>
+    let pName = "", score = 0, timeLeft = 60, correctAns = 0, timer, curLv = 0, isPaused = false;
+    let tickSpeed = 1000, combo = 0;
+
+    // ✅ 排行榜：登入頁不顯示，改為在選關頁顯示（以及需要時更新）
+    window.onload = () => displayRank('rank-content-levels');
+
+    function toLevels() {
+        pName = document.getElementById('player-name').value.trim();
+        if(!pName) return alert("請輸入勇者姓名以進入王國！");
+        showScr('scr-levels');
+    }
+
+    function setDiff(lv, speed) {
+        tickSpeed = speed;
+        document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('diff-' + lv).classList.add('selected');
+    }
+
+    function showScr(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        // ✅ 只在選關頁刷新排行榜
+        if(id === 'scr-levels') displayRank('rank-content-levels');
+    }
+
+    function startGame(lv) {
+        curLv = lv; score = 0; timeLeft = 60; combo = 0;
+        showScr('scr-game');
+        nextQ();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(!isPaused) {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) endGame();
+            }
+        }, tickSpeed);
+    }
+
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+        const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+        return { x: centerX + (radius * Math.cos(angleInRadians)), y: centerY + (radius * Math.sin(angleInRadians)) };
+    }
+
+    function getSectorPath(x, y, radius, startAngle, endAngle) {
+        const start = polarToCartesian(x, y, radius, endAngle);
+        const end = polarToCartesian(x, y, radius, startAngle);
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+        return ["M", x, y, "L", start.x, start.y, "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y, "Z"].join(" ");
+    }
+
+    function nextQ() {
+        let r = Math.floor(Math.random() * 6) + 4;
+        let box = document.getElementById('q-box');
+        let shapeBox = document.getElementById('shape-display');
+        let drawHtml = "";
+
+        if(curLv === 1) { // 圓形
+            correctAns = (r * r * 3.14).toFixed(2);
+            box.innerText = `森林裡有一棵半徑 ${r} 公尺的巨樹，請問它的圓形截面積是多少平方公尺？`;
+            drawHtml = `<div class="circle-base" style="width:${r*12}px; height:${r*12}px;">
+                            <div class="radius-line" style="width:${r*6}px;"></div>
+                            <div class="radius-label" style="top:38%; left:62%;">r = ${r}</div>
+                        </div>`;
+        } else if(curLv === 2) {
+            let angle = [60, 90, 120, 180, 270][Math.floor(Math.random()*5)];
+            correctAns = (r * r * 3.14 * angle / 360).toFixed(2);
+            box.innerText = `海上有一座半徑 ${r} 公里、中心角 ${angle} 度的扇形島嶼，它的面積是多少平方公里？`;
+            drawHtml = `<svg width="160" height="160" viewBox="0 0 160 160">
+                            <path d="${getSectorPath(80, 80, r*6, 0, angle)}" fill="rgba(102,126,234,0.2)" stroke="#2d3748" stroke-width="2.5" />
+                            <line x1="80" y1="80" x2="80" y2="${80-r*6}" stroke="#e53e3e" stroke-width="2" stroke-dasharray="3" />
+                            <text x="85" y="${80-r*3}" fill="#e53e3e" font-size="14" font-weight="bold">${r}</text>
+                            <text x="70" y="105" fill="#4a5568" font-size="13" font-weight="bold">${angle}°</text>
+                        </svg>`;
+        } else if(curLv === 3) {
+            correctAns = (r * r * 3.14).toFixed(2);
+            box.innerText = `正方形板子邊長為 ${r*2} 公分，挖出一個最大的內切圓，求該圓形面積是多少平方公分？`;
+            drawHtml = `<div style="width:${r*12}px; height:${r*12}px; border:2.5px solid #2d3748; display:flex; justify-content:center; align-items:center; position:relative; background:#fff;">
+                            <div class="circle-base" style="width:100%; height:100%; border:1.5px dashed #4a5568;"></div>
+                            <div style="position:absolute; bottom:-22px; color:#2d3748; font-size:13px; font-weight:bold;">邊長 ${r*2}</div>
+                        </div>`;
+        } else {
+            correctAns = (r * r * 3.14 / 4).toFixed(2);
+            box.innerText = `牛被栓在方形草地角落，繩長 ${r} 公尺，請問牛能吃到草的面積是多少平方公尺？(1/4圓)`;
+            drawHtml = `<div style="width:130px; height:130px; border-left:2.5px solid #2d3748; border-top:2.5px solid #2d3748; position:relative; background:#fff;">
+                            <svg width="130" height="130">
+                                <path d="${getSectorPath(0, 0, r*8.5, 90, 180)}" fill="rgba(245,101,101,0.15)" stroke="#e53e3e" stroke-width="2" stroke-dasharray="5" />
+                                <text x="12" y="25" fill="#e53e3e" font-size="14" font-weight="bold">繩長 ${r}</text>
+                            </svg>
+                        </div>`;
+        }
+        shapeBox.innerHTML = drawHtml;
+        document.getElementById('user-ans').value = "";
+        document.getElementById('user-ans').focus();
+    }
+
+    function checkAns() {
+        if(isPaused) return;
+        const input = document.getElementById('user-ans');
+        let uAns = parseFloat(input.value);
+        if(isNaN(uAns)) return;
+
+        if(Math.abs(uAns - parseFloat(correctAns)) < 0.1) {
+            combo++;
+            let gain = 10 + combo;
+            score += gain;
+            timeLeft += 5;
+            showFB(`正確！+${gain}`, "#48bb78");
+        } else {
+            combo = 0;
+            timeLeft -= 6;
+            showFB(`錯誤！答為 ${correctAns}`, "#f56565");
+        }
+        document.getElementById('score').innerText = score;
+        nextQ();
+    }
+
+    function showFB(txt, color) {
+        let fb = document.getElementById('fb-box');
+        fb.innerText = txt;
+        fb.style.backgroundColor = color;
+        fb.style.display = "block";
+        setTimeout(() => fb.style.display = "none", 1400);
+    }
+
+    function pauseGame() { isPaused = true; document.getElementById('pause-overlay').style.display = 'flex'; }
+    function resumeGame() { isPaused = false; document.getElementById('pause-overlay').style.display = 'none'; }
+    function restartGame() { if(confirm("確定要重啟試煉嗎？")) startGame(curLv); }
+    function backToLevels() { if(confirm("回選單嗎？")) { clearInterval(timer); showScr('scr-levels'); } }
+
+    function endGame() {
+        clearInterval(timer);
+        showScr('scr-result');
+        document.getElementById('res-name').innerText = pName;
+        document.getElementById('final-score').innerText = score;
+        saveRank(pName, score);
+    }
+
+    function saveRank(name, score) {
+        let board = JSON.parse(localStorage.getItem('math_rank_final') || "[]");
+        board.push({name: name, score: score});
+        board.sort((a,b) => b.score - a.score);
+        localStorage.setItem('math_rank_final', JSON.stringify(board.slice(0, 5)));
+    }
+
+    function displayRank(targetId) {
+        let board = JSON.parse(localStorage.getItem('math_rank_final') || "[]");
+        let html = board.length ? "" : "<p style='color:#a0aec0; text-align:center;'>尚無紀錄</p>";
+        board.forEach((i, idx) => {
+            html += `<div class="rank-item"><span>${idx+1}. ${i.name}</span><span>${i.score} Pt</span></div>`;
+        });
+        const el = document.getElementById(targetId);
+        if(el) el.innerHTML = html;
+    }
+
+    document.getElementById('user-ans').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkAns(); });
+</script>
+</body>
+</html>
