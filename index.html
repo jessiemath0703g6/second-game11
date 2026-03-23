@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta property="og:title" content="Jessie Math捷析 - 消失的圓之鑰">
+    <meta property="og:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="g6-u11.png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1536">
+    <meta property="og:image:alt" content="Jessie Math 遊戲封面">
+    <link rel="image_src" href="g6-u11.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jessie Math捷析 - 消失的圓之鑰">
+    <meta name="twitter:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta name="twitter:image" content="g6-u11.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jessie Math 捷析 - 消失的圓之鑰</title> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --p-yellow: #FFD700; --bg-blue: #f8f9fa; --dark: #01579b; --orange: #ff9800; --nav-border: #e0e6ed; --nav-text: #4a5568; }
+        
+        /* 1. Body 背景圖依比例放大延伸，且鎖定右上角讓品牌字出現 */
+        body { 
+            font-family: "Microsoft JhengHei", Arial, sans-serif; 
+            background: url('jessie logo.jpg') no-repeat right top fixed; 
+            background-size: cover; 
+            margin: 0; 
+            overflow-x: hidden; 
+        }
+
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+            body::before {
+                content: "📱 請將手機轉為橫向以獲得最佳遊戲體驗 🔄";
+                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+                background: #2d3748; color: white; display: flex;
+                align-items: center; justify-content: center;
+                font-size: 22px; z-index: 9999; font-weight: bold; text-align: center; padding: 20px; box-sizing: border-box;
+            }
+            #wrapper { display: none !important; }
+        }
+
+        /* 2. Header 區塊留白 (改為白色)，保留其他設定 */
+        header { 
+            background: #ffffff; 
+            padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid var(--nav-border); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-box { display: flex; align-items: center; }
+        .logo-circle { 
+            width: 42px; height: 42px; border: 2px solid var(--p-yellow); border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; margin-right: 12px; overflow: hidden; background: white;
+        }
+        .logo-circle img { width: 85%; height: auto; }
+        .brand { font-size: 24px; font-weight: 700; color: #2d3748; letter-spacing: -0.5px; }
+
+        .hero-nav { display: flex; align-items: center; gap: 12px; }
+        .nav-link {
+            text-decoration: none; color: var(--nav-text); font-size: 16px; padding: 8px 20px;
+            border: 1px solid var(--nav-border); border-radius: 25px; display: flex; align-items: center;
+            gap: 8px; transition: all 0.2s ease; background: white;
+        }
+        .nav-link:hover { background: #f7fafc; border-color: #cbd5e0; }
+        .nav-link.special { color: #667eea; border-color: #667eea; }
+        .nav-link.special:hover { background: #ebf4ff; }
+
+        #main-container { 
+            max-width: 800px; 
+            margin: 30px auto; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            position: relative; 
+            text-align: center; 
+            border: 1px solid #edf2f7; 
+        }
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        input { padding: 14px; font-size: 18px; border: 2px solid #e2e8f0; border-radius: 12px; width: 85%; margin: 15px 0; outline: none; box-sizing: border-box; }
+        input:focus { border-color: #667eea; }
+        .btn { background: var(--dark); color: white; border: none; padding: 12px 30px; font-size: 16px; border-radius: 30px; cursor: pointer; margin: 5px; font-weight: bold; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-orange { background: var(--orange); }
+
+        #shape-display { height: 220px; display: flex; justify-content: center; align-items: center; margin: 20px 0; background: #fafcfe; border-radius: 15px; overflow: hidden; position: relative; }
+
+        .circle-base { border: 2.5px solid #2d3748; border-radius: 50%; background: rgba(102,126,234,0.1); position: relative; display: flex; justify-content: center; align-items: center; }
+        .radius-line { position: absolute; top: 50%; left: 50%; height: 2.5px; background: #e53e3e; transform-origin: left; }
+        .radius-label { position: absolute; color: #e53e3e; font-size: 16px; font-weight: bold; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 5px; }
+        
+        .circle-highlight { box-shadow: 0 0 0 5px rgba(229,62,62,0.6); }
+
+        .stats { display: flex; justify-content: space-around; background: #2d3748; color: white; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; position: relative; z-index: 60;}
+        #q-box { font-size: 1.25rem; font-weight: bold; margin: 20px 0; min-height: 3.5em; color: #2d3748; line-height: 1.6; }
+
+        .diff-group { margin-bottom: 25px; }
+        .diff-btn { padding: 10px 22px; border: 1px solid #cbd5e0; border-radius: 12px; cursor: pointer; display: inline-block; margin: 5px; transition: 0.3s; color: #4a5568; background: white; font-weight: bold; }
+        .diff-btn.selected { background: var(--dark); color: white; border-color: var(--dark); }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; position: relative; z-index: 60; }
+        .opt-btn { background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px; font-size: 18px; color: #2d3748; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .opt-btn:hover { background: #edf2f7; border-color: #cbd5e0; }
+
+        .rank-list { text-align: left; margin-top: 25px; background: #f7fafc; padding: 20px; border-radius: 15px; border: 1px solid #edf2f7; overflow-x: auto; }
+        .rank-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .rank-table th, .rank-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+        .rank-table th { color: #4a5568; font-weight: bold; background: #edf2f7; }
+        .rank-table td { color: #2d3748; font-weight: 500; }
+        .rank-medal { font-size: 1.2rem; }
+
+        .review-item { text-align: left; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .review-item.wrong { border-left: 5px solid #f56565; }
+        .review-item.correct { border-left: 5px solid #48bb78; }
+
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 120; display: none; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px; }
+
+        #scr-game {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* 3. 白板專屬 CSS，改為 BODY 整版全螢幕 */
+        #drawing-board {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999; /* 最高層級，墨水蓋過全部內容 */
+            pointer-events: none; /* 讓底下的所有按鈕都可以被點擊 */
+            background: transparent;
+        }
+
+        /* Jessie 加油員專屬 CSS */
+        #jessie-mascot {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            z-index: 70;
+            display: none;
+            align-items: flex-end;
+            pointer-events: none; /* 絕對不阻擋白板跟按鈕 */
+            animation: popUp 0.3s ease-out;
+        }
+        @keyframes popUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #jessie-mascot img {
+            width: 80px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        .jessie-bubble {
+            background: white; border: 2px solid var(--orange); border-radius: 15px;
+            padding: 8px 15px; margin-left: 5px; font-weight: bold; font-size: 14px;
+            color: #2d3748; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: relative; margin-bottom: 50px;
+            white-space: nowrap;
+        }
+        .jessie-bubble::after {
+            content: ''; position: absolute; bottom: -8px; left: 15px;
+            border-width: 8px 8px 0; border-style: solid;
+            border-color: var(--orange) transparent transparent transparent;
+        }
+
+        footer { margin-top: 26px; padding: 0 14px 22px; }
+        .footer-pill{ max-width: 900px; margin: 0 auto; display:flex; justify-content:space-between; align-items:center; gap: 12px; padding: 14px 16px; border-radius: 999px; background: rgba(255,255,255,0.92); border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .footer-left,.footer-right{ display:flex; align-items:center; gap:10px; }
+        .footer-dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--p-yellow); box-shadow: 0 0 0 4px rgba(255,215,0,0.18); }
+        .footer-copy{ color:#2d3748; font-weight:700; font-size: 13px; }
+        .footer-icon{ color: var(--dark); font-size: 14px; }
+        .footer-tagline{ color:#4a5568; font-weight:600; font-size: 13px; }
+
+        @media (max-width: 1024px) { #main-container { max-width: 720px; margin: 22px auto; } }
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px; }
+            .hero-nav { flex-wrap: wrap; justify-content: center; }
+            #main-container { margin: 16px auto; padding: 18px; border-radius: 18px; max-width: 95%; }
+            .stats { gap: 10px; flex-wrap: wrap; }
+            #shape-display { height: 190px; }
+            .footer-pill{ border-radius: 22px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            #jessie-mascot img { width: 60px; }
+            .jessie-bubble { font-size: 12px; margin-bottom: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="drawing-board"></canvas>
+
+<div id="wrapper">
+    <header>
+        <div class="logo-box">
+            <div class="logo-circle"><img src="JESSIEMATH-Q.png" onerror="this.src='https://via.placeholder.com/35?text=J'"></div>
+            <div class="brand">Jessie Math 捷析</div>
+        </div>
+        <nav class="hero-nav">
+            <a href="https://jessiemath0703-chu.github.io/website2/" class="nav-link"><i class="fas fa-home"></i> 首頁</a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/" class="nav-link"><i class="fas fa-laptop"></i> 遊戲大廳</a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/#g6-u11" class="nav-link special"><i class="fas fa-chevron-left"></i> G6圓面積與扇形面積</a>
+        </nav>
+    </header>
+
+    <div id="main-container">
+
+        <div id="scr-login" class="screen active">
+            <h2 style="color: #2d3748; margin-bottom: 25px;">幾何王國：消失的圓之鑰</h2>
+            <div style="background: #ebf4ff; border: 1px solid #bee3f8; padding: 20px; border-radius: 15px; text-align: left; margin-bottom: 25px; font-size: 15px; color: #2c5282;">
+                <strong style="font-size: 17px; display: block; margin-bottom: 8px;"><i class="fas fa-scroll"></i> 冒險試煉指南</strong>
+                • 使用 <b>3.14</b> 計算圓與扇形面積。<br>
+                • 整個題板區域皆可直接滑動當作白板計算紙。<br>
+                • 答對加分獎勵秒數，答錯扣除秒數。<br>
+                • 挑戰結束後可查看王國英雄榜與復盤解析。
+            </div>
+            <p style="font-weight: 600; color: #4a5568;">請輸入勇者姓名：</p>
+            <input type="text" id="player-name" placeholder="您的冒險代號...">
+            <br>
+            <button class="btn" onclick="toLevels()" style="padding: 14px 45px; font-size: 18px;">前往選關</button>
+        </div>
+
+        <div id="scr-levels" class="screen">
+            <h3 style="color: #2d3748;">選擇試煉主題與挑戰難度</h3>
+            <div class="diff-group">
+                <div class="diff-btn selected" id="diff-1" onclick="setDiff(1, '基礎', 90)">基礎 (90秒)</div>
+                <div class="diff-btn" id="diff-2" onclick="setDiff(2, '進階', 60)">進階 (60秒)</div>
+                <div class="diff-btn" id="diff-3" onclick="setDiff(3, '魔王', 45)">魔王 (45秒)</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <button class="btn btn-orange" onclick="startGame(1)">🌲 圓之森林</button>
+                <button class="btn btn-orange" onclick="startGame(2)">🌊 扇形之海</button>
+                <button class="btn btn-orange" onclick="startGame(3)">⚙️ 幾何工坊</button>
+                <button class="btn btn-orange" onclick="startGame(4)">🐄 牛吃草應用</button>
+            </div>
+
+            <div id="levels-rank" class="rank-list">
+                <h4 style="margin-top:0; text-align:center;"><i class="fas fa-trophy" style="color:gold;"></i> 英雄排行榜 (Top 10)</h4>
+                <table class="rank-table">
+                    <thead><tr><th>名次</th><th>玩家</th><th>挑戰關卡</th><th>難度</th><th>成績 / 答題數</th><th>日期 / 時間</th></tr></thead>
+                    <tbody id="rank-content-levels"></tbody>
+                </table>
+            </div>
+
+            <button class="btn" onclick="showScr('scr-login')" style="background:#edf2f7; color: #4a5568; margin-top:15px;">返回首頁</button>
+        </div>
+
+        <div id="scr-game" class="screen">
+            <div class="stats">
+                <span><i class="fas fa-hourglass-half"></i> 剩餘時間: <span id="timer">60</span>s</span>
+                <span><i class="fas fa-star" style="color:gold;"></i> 分數: <span id="score">0</span></span>
+            </div>
+            
+            <div id="shape-display"></div>
+            <div id="q-box">正在開啟幾何門扉...</div>
+            
+            <div id="options-box" class="options-grid"></div>
+            
+            <div id="jessie-mascot">
+                <img src="jessie.png" onerror="this.src='https://via.placeholder.com/80?text=Jessie'">
+                <div id="jessie-bubble" class="jessie-bubble">加油！</div>
+            </div>
+
+            <div style="margin-top:20px; border-top:1px solid #edf2f7; padding-top:20px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; position: relative; z-index: 60;">
+                <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="pauseGame()"><i class="fas fa-pause"></i> 暫停</button>
+                <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="restartGame()"><i class="fas fa-undo"></i> 重來</button>
+                <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="clearCanvas()"><i class="fas fa-eraser"></i> 清空畫板</button>
+                <button class="btn" style="background:#e2e8f0; color: #4a5568;" onclick="backToLevels()"><i class="fas fa-th-large"></i> 回主選單</button>
+            </div>
+            
+            <div id="pause-overlay" class="overlay">
+                <h1 style="color: #2d3748;">試煉暫停中</h1>
+                <button class="btn" onclick="resumeGame()" style="padding: 14px 40px;">返回試煉</button>
+            </div>
+        </div>
+
+        <div id="scr-result" class="screen">
+            <h2>試煉結束！</h2>
+            <div style="font-size: 1.1rem; color: #718096;">最終冒險分數</div>
+            <h1 id="final-score" style="color:var(--dark); font-size: 4rem; margin: 15px 0;">0</h1>
+            <p style="font-size: 1.25rem; color: #4a5568; margin-bottom: 25px;">勇者：<span id="res-name" style="font-weight:bold;"></span></p>
+            <button class="btn btn-orange" onclick="showScr('scr-review')" style="margin-bottom: 10px;">📊 查看復盤</button>
+            <br>
+            <button class="btn" onclick="showScr('scr-levels')">返回選關</button>
+        </div>
+
+        <div id="scr-review" class="screen">
+            <h2 style="color: #2d3748;"><i class="fas fa-clipboard-check"></i> 戰鬥復盤</h2>
+            <div id="review-summary" style="margin-bottom: 15px; font-size: 16px; font-weight: bold; color: #2d3748; background: #ebf4ff; padding: 12px; border-radius: 10px; border: 1px solid #bee3f8; display:flex; justify-content:space-around; flex-wrap:wrap; gap:10px;"></div>
+            <div id="review-content" style="max-height: 400px; overflow-y: auto; padding: 10px; background: #fafcfe; border-radius: 10px;"></div>
+            <button class="btn" onclick="showScr('scr-result')" style="margin-top: 20px; background:#edf2f7; color: #4a5568;">返回成績</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-pill">
+            <div class="footer-left">
+                <div class="footer-dot" aria-hidden="true"></div>
+                <div class="footer-copy">© 2025–2026 Jessie Math 捷析老師. All rights reserved.</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-icon" aria-hidden="true"><i class="fas fa-compass"></i></div>
+                <div class="footer-tagline">數學不迷路，捷析Jessie 帶你走向理解。</div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<div id="fb-box" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); padding:25px 50px; border-radius:20px; color:white; display:none; z-index:2000; font-size:28px; font-weight:bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);"></div>
+
+<script>
+    let pName = "", score = 0, timeLeft = 60, correctAns = "", timer, curLv = 0, isPaused = false;
+    let combo = 0, diffLvl = 1, diffNameStr = '基礎', maxTime = 90;
+    let currentQText = "";
+    let reviewData = [];
+    let usedQuestions = []; 
+    const lvNames = ["", "圓之森林", "扇形之海", "幾何工坊", "牛吃草應用"];
+
+    // Jessie 加油鼓勵語錄
+    const jessieCorrectMsgs = ["太棒了！", "繼續保持！", "算得真快！", "完美的捷析！", "你太厲害了！", "好棒，就是這樣算！"];
+    const jessieWrongMsgs = ["沒關係，再試一次！", "加油，你可以的！", "仔細想想喔！", "不要氣餒！", "深呼吸，重新算一次！", "差一點點就對了！"];
+    let jessieTid = null;
+
+    // ----------------------------------------
+    // 全螢幕白板 Canvas 核心邏輯
+    // ----------------------------------------
+    const canvas = document.getElementById('drawing-board');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.strokeStyle = '#3182ce'; 
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function getMousePos(e) {
+        const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+        const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+        return { x: clientX, y: clientY };
+    }
+
+    const startDrawing = (e) => {
+        if(!document.getElementById('scr-game').classList.contains('active')) return; 
+        if(isPaused) return; 
+        
+        if(e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) {
+            return;
+        }
+        
+        isDrawing = true;
+        const pos = getMousePos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        if(e.cancelable) e.preventDefault();
+    };
+
+    const draw = (e) => {
+        if (!isDrawing) return;
+        const pos = getMousePos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        if(e.cancelable) e.preventDefault();
+    };
+
+    const stopDrawing = () => {
+        if(isDrawing) {
+            isDrawing = false;
+            ctx.closePath();
+        }
+    };
+
+    document.addEventListener('mousedown', startDrawing);
+    document.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', stopDrawing);
+
+    document.addEventListener('touchstart', startDrawing, {passive: false});
+    document.addEventListener('touchmove', draw, {passive: false});
+    window.addEventListener('touchend', stopDrawing);
+    window.addEventListener('touchcancel', stopDrawing);
+
+    window.addEventListener('resize', () => {
+        if (document.getElementById('scr-game').classList.contains('active')) initCanvas();
+    });
+    // ----------------------------------------
+
+    window.onload = () => {
+        displayRank();
+    };
+
+    function toLevels() {
+        pName = document.getElementById('player-name').value.trim();
+        if(!pName) return alert("請輸入勇者姓名以進入王國！");
+        showScr('scr-levels');
+    }
+
+    function setDiff(lv, name, time) {
+        diffLvl = lv; diffNameStr = name; maxTime = time;
+        document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('diff-' + lv).classList.add('selected');
+    }
+
+    function showScr(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'scr-levels') displayRank();
+        if(id === 'scr-review') renderReview();
+    }
+
+    function startGame(lv) {
+        curLv = lv; score = 0; timeLeft = maxTime; combo = 0; reviewData = [];
+        usedQuestions = []; 
+        document.getElementById('timer').innerText = timeLeft;
+        document.getElementById('score').innerText = score;
+        document.getElementById('jessie-mascot').style.display = 'none'; // 重置吉祥物
+        showScr('scr-game');
+        nextQ();
+        startTimer();
+    }
+
+    function restartGame() {
+        if(confirm("確定要重頭開始這項試煉嗎？")) {
+            startGame(curLv);
+        }
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(!isPaused) { 
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) endGame();
+            }
+        }, 1000);
+    }
+
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+        const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+        return { x: centerX + (radius * Math.cos(angleInRadians)), y: centerY + (radius * Math.sin(angleInRadians)) };
+    }
+    
+    function getSectorPath(x, y, radius, startAngle, endAngle) {
+        const start = polarToCartesian(x, y, radius, endAngle);
+        const end = polarToCartesian(x, y, radius, startAngle);
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+        return ["M", x, y, "L", start.x, start.y, "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y, "Z"].join(" ");
+    }
+
+    function generateOptions(correct) {
+        let opts = [correct];
+        let val = parseFloat(correct);
+        while(opts.length < 4) {
+            let offset = (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 5) + 1) * 3.14;
+            let fake = (val + offset).toFixed(2);
+            if(fake > 0 && !opts.includes(fake)) opts.push(fake);
+        }
+        return opts.sort(() => Math.random() - 0.5);
+    }
+
+    function nextQ() {
+        let box = document.getElementById('q-box');
+        let shapeBox = document.getElementById('shape-display');
+        let drawHtml = "";
+        
+        let r, angle, varType, qKey;
+        let attempts = 0;
+        
+        do {
+            r = Math.floor(Math.random() * 16) + 5;
+            angle = [30, 45, 60, 90, 120, 135, 150, 180, 270, 300][Math.floor(Math.random()*10)];
+            varType = Math.floor(Math.random() * 3); 
+
+            if(curLv === 2) varType = Math.floor(Math.random() * 2); 
+            if(curLv === 3 || curLv === 4) varType = 0; 
+            
+            qKey = `${curLv}-${r}-${angle}-${varType}`;
+            attempts++;
+        } while (usedQuestions.includes(qKey) && attempts < 50);
+        
+        usedQuestions.push(qKey);
+
+        if(curLv === 1) { 
+            correctAns = (r * r * 3.14).toFixed(2);
+            let size = r*8;
+            if(size > 200) size = 200; if(size < 80) size = 80;
+
+            if(varType === 0) {
+                currentQText = `森林裡有一棵巨樹，已知其橫截面的半徑為 ${r} 公尺，請問它的圓形截面積是多少平方公尺？`;
+                drawHtml = `<div class="circle-base" style="width:${size}px; height:${size}px;">
+                                <div class="radius-line" style="width:50%;"></div>
+                                <div class="radius-label" style="top:35%; left:55%;">r = ${r}</div>
+                            </div>`;
+            } else if (varType === 1) {
+                currentQText = `森林裡有一個圓形花圃，已知其直徑為 ${r*2} 公尺，請問它的面積是多少平方公尺？`;
+                drawHtml = `<div class="circle-base" style="width:${size}px; height:${size}px;">
+                                <div class="radius-line" style="width:100%; left:0;"></div>
+                                <div class="radius-label" style="top:35%; left:35%;">d = ${r*2}</div>
+                            </div>`;
+            } else {
+                let c = parseFloat((r * 2 * 3.14).toFixed(2));
+                currentQText = `一個圓形魔法陣的圓周長是 ${c} 公尺，請問它的面積是多少平方公尺？`;
+                drawHtml = `<div class="circle-base circle-highlight" style="width:${size}px; height:${size}px;">
+                                <div class="radius-label" style="top:40%; left:30%;">周長 ${c}</div>
+                            </div>`;
+            }
+
+        } else if(curLv === 2) {
+            correctAns = (r * r * 3.14 * angle / 360).toFixed(2);
+            if(varType === 0) {
+                currentQText = `海上有一座半徑 ${r} 公里、中心角 ${angle} 度的扇形島嶼，它的面積是多少平方公里？`;
+                drawHtml = `<svg width="200" height="200" viewBox="0 0 200 200">
+                                <path d="${getSectorPath(100, 100, 80, 0, angle)}" fill="rgba(102,126,234,0.2)" stroke="#2d3748" stroke-width="2.5" />
+                                <line x1="100" y1="100" x2="100" y2="20" stroke="#e53e3e" stroke-width="2" stroke-dasharray="3" />
+                                <text x="105" y="60" fill="#e53e3e" font-size="16" font-weight="bold">${r}</text>
+                                <text x="90" y="130" fill="#4a5568" font-size="15" font-weight="bold">${angle}°</text>
+                            </svg>`;
+            } else {
+                currentQText = `一個扇形雷達探測區的直徑長為 ${r*2} 公里、中心角 ${angle} 度，請問其探測面積是多少平方公里？`;
+                drawHtml = `<svg width="200" height="200" viewBox="0 0 200 200">
+                                <path d="${getSectorPath(100, 100, 80, 0, angle)}" fill="rgba(102,126,234,0.2)" stroke="#2d3748" stroke-width="2.5" />
+                                <line x1="100" y1="100" x2="100" y2="20" stroke="#e53e3e" stroke-width="2" stroke-dasharray="3" />
+                                <text x="105" y="60" fill="#e53e3e" font-size="16" font-weight="bold">d=${r*2}</text>
+                                <text x="90" y="130" fill="#4a5568" font-size="15" font-weight="bold">${angle}°</text>
+                            </svg>`;
+            }
+        } else if(curLv === 3) {
+            correctAns = (r * r * 3.14).toFixed(2);
+            currentQText = `正方形板子邊長為 ${r*2} 公分，挖出一個最大的內切圓，求該圓形面積是多少平方公分？`;
+            let size = Math.min(r*10, 180);
+            drawHtml = `<div style="width:${size}px; height:${size}px; border:3px solid #2d3748; display:flex; justify-content:center; align-items:center; position:relative; background:#fff;">
+                            <div class="circle-base" style="width:100%; height:100%; border:2px dashed #4a5568;"></div>
+                            <div style="position:absolute; bottom:-25px; color:#2d3748; font-size:15px; font-weight:bold;">邊長 ${r*2}</div>
+                        </div>`;
+        } else {
+            correctAns = (r * r * 3.14 / 4).toFixed(2);
+            currentQText = `牛被栓在方形草地角落，繩長 ${r} 公尺，請問牛能吃到草的面積是多少平方公尺？`;
+            drawHtml = `<div style="width:160px; height:160px; border-left:3px solid #2d3748; border-top:3px solid #2d3748; position:relative; background:#fff;">
+                            <svg width="160" height="160">
+                                <path d="${getSectorPath(0, 0, 140, 90, 180)}" fill="rgba(245,101,101,0.15)" stroke="#e53e3e" stroke-width="2" stroke-dasharray="5" />
+                                <text x="15" y="30" fill="#e53e3e" font-size="16" font-weight="bold">繩長 ${r}</text>
+                            </svg>
+                        </div>`;
+        }
+        
+        box.innerText = currentQText;
+        shapeBox.innerHTML = drawHtml;
+        
+        let optionsHtml = "";
+        let opts = generateOptions(correctAns);
+        opts.forEach(opt => {
+            optionsHtml += `<button class="opt-btn" onclick="checkAns('${opt}')">${opt}</button>`;
+        });
+        document.getElementById('options-box').innerHTML = optionsHtml;
+
+        setTimeout(initCanvas, 0);
+    }
+
+    // 觸發捷析老師加油員
+    function showJessieCheer(isCorrect) {
+        if(Math.random() > 0.7) return; // 70% 機率出現加油員
+        
+        let msgList = isCorrect ? jessieCorrectMsgs : jessieWrongMsgs;
+        let msg = msgList[Math.floor(Math.random() * msgList.length)];
+        
+        let mascot = document.getElementById('jessie-mascot');
+        document.getElementById('jessie-bubble').innerText = msg;
+        mascot.style.display = 'flex';
+        
+        if(jessieTid) clearTimeout(jessieTid);
+        jessieTid = setTimeout(() => {
+            mascot.style.display = 'none';
+        }, 2500); // 顯示 2.5 秒後消失
+    }
+
+    function checkAns(uAns) {
+        if(isPaused) return;
+        let isCorrect = (uAns === correctAns);
+        
+        reviewData.push({ q: currentQText, u: uAns, c: correctAns, ok: isCorrect });
+
+        if(isCorrect) {
+            combo++;
+            let gain = 10 + combo * 2;
+            score += gain;
+            timeLeft += 3;
+            showFB(`正確！+${gain}`, "#48bb78");
+        } else {
+            combo = 0;
+            timeLeft -= 5;
+            showFB(`錯誤！答為 ${correctAns}`, "#f56565");
+        }
+        
+        document.getElementById('score').innerText = score;
+        document.getElementById('timer').innerText = timeLeft;
+        
+        showJessieCheer(isCorrect); // 呼叫老師出來鼓勵
+
+        if(timeLeft <= 0) endGame();
+        else nextQ();
+    }
+
+    function showFB(txt, color) {
+        let fb = document.getElementById('fb-box');
+        fb.innerText = txt;
+        fb.style.backgroundColor = color;
+        fb.style.display = "block";
+        setTimeout(() => fb.style.display = "none", 1200);
+    }
+
+    function pauseGame() { isPaused = true; document.getElementById('pause-overlay').style.display = 'flex'; }
+    function resumeGame() { isPaused = false; document.getElementById('pause-overlay').style.display = 'none'; }
+    function backToLevels() { if(confirm("確定要回主選單嗎？目前進度將會遺失。")) { clearInterval(timer); showScr('scr-levels'); } }
+
+    function endGame() {
+        clearInterval(timer);
+        if(timeLeft < 0) timeLeft = 0;
+        document.getElementById('timer').innerText = timeLeft;
+        showScr('scr-result');
+        document.getElementById('res-name').innerText = pName;
+        document.getElementById('final-score').innerText = score;
+        saveRank(pName, score);
+    }
+
+    function renderReview() {
+        let html = "";
+        let total = reviewData.length;
+        let correct = reviewData.filter(r => r.ok).length;
+        let wrong = total - correct;
+
+        // 插入上方統計區塊
+        document.getElementById('review-summary').innerHTML = `
+            <span>🎯 此次分數: <span style="color:#e53e3e">${score}</span></span>
+            <span>✅ 答對: <span style="color:#48bb78">${correct} / ${total} 題</span></span>
+            <span>❌ 答錯: <span style="color:#f56565">${wrong} / ${total} 題</span></span>
+        `;
+
+        if(total === 0) html = "<p>無作答紀錄。</p>";
+        reviewData.forEach((item, idx) => {
+            let cls = item.ok ? 'correct' : 'wrong';
+            let icon = item.ok ? '<i class="fas fa-check-circle" style="color:#48bb78;"></i>' : '<i class="fas fa-times-circle" style="color:#f56565;"></i>';
+            html += `<div class="review-item ${cls}">
+                        <div style="font-weight:bold; margin-bottom:5px;">Q${idx+1}: ${item.q}</div>
+                        <div style="font-size:14px; color:#4a5568;">
+                            你的答案: ${item.u} ${icon}<br>
+                            正確答案: ${item.c}
+                        </div>
+                     </div>`;
+        });
+        document.getElementById('review-content').innerHTML = html;
+    }
+
+    function saveRank(name, score) {
+        // 更新為存取新金鑰 math_rank_v3，避免與舊資料格式衝突
+        let board = JSON.parse(localStorage.getItem('math_rank_v3') || "[]");
+        // 取得詳細時間 YYYY/MM/DD HH:mm:ss
+        let dateStr = new Date().toLocaleString('zh-TW', { hour12: false }); 
+        
+        board.push({ name: name, lv: lvNames[curLv], diff: diffNameStr, score: score, qCount: reviewData.length, date: dateStr });
+        board.sort((a,b) => b.score - a.score);
+        localStorage.setItem('math_rank_v3', JSON.stringify(board.slice(0, 10)));
+    }
+
+    function displayRank() {
+        let board = JSON.parse(localStorage.getItem('math_rank_v3') || "[]");
+        let tbody = document.getElementById('rank-content-levels');
+        if(!tbody) return;
+        
+        if(board.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='6' style='color:#a0aec0;'>尚無英雄留下紀錄</td></tr>";
+            return;
+        }
+
+        let html = "";
+        const medals = ['🥇', '🥈', '🥉', '🏅', '🏅', '🏅', '🎖️', '🎖️', '🎖️', '🎖️'];
+        board.forEach((i, idx) => {
+            let rankIcon = `<span class="rank-medal">${medals[idx]}</span>`;
+            let qCountDisplay = i.qCount !== undefined ? i.qCount : 0; // 防止舊資料未定義答題數
+            html += `<tr>
+                        <td>${rankIcon} ${idx+1}</td>
+                        <td style="font-weight:bold;">${i.name}</td>
+                        <td>${i.lv}</td>
+                        <td>${i.diff}</td>
+                        <td style="color:#e53e3e; font-weight:bold;">${i.score} Pt <span style="font-size:0.85em; color:#4a5568; font-weight:normal;">/ ${qCountDisplay}題</span></td>
+                        <td style="font-size:0.9em; color:#718096;">${i.date}</td>
+                     </tr>`;
+        });
+        tbody.innerHTML = html;
+    }
+</script>
+</body>
+</html>
